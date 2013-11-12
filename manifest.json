@@ -2,7 +2,6 @@
   "manifest_version": 2,
 
   "name": "LiveReddit (Beta)",
-  "short_name": "LiveReddit",
   "description": "Never press F5 on Reddit again -- LiveReddit updates everything in realtime!",
   "version": "0.0.3",
 

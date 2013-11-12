@@ -1,9 +1,19 @@
-var socketio = $.get("http://ec2-54-216-3-39.eu-west-1.compute.amazonaws.com:8080/socket.io/socket.io.js", eval);
+// socket.io server location - on EC2 for now...
+var serverUrl = "http://ec2-54-216-3-39.eu-west-1.compute.amazonaws.com:8080";
 
-var listeners = {};
+// loads socket.io.js
+var socketio = $.get(serverUrl + "/socket.io/socket.io.js", eval);
 
 socketio.complete(function() {
-	var socket = io.connect('http://ec2-54-216-3-39.eu-west-1.compute.amazonaws.com:8080');
+	var socket = io.connect(serverUrl);
+
+	// channel listeners
+	var listeners = {};
+
+	var listenForUpdates = function(id, callback) {
+		// TODO should add callback to a list!!
+		listeners[id] = callback; 
+	};
 
 	socket.on('update', function (data) {
 		listeners[data.channel](data.value);
@@ -15,10 +25,6 @@ socketio.complete(function() {
 
 	var sendUpdate = function(chan, val) {
 		socket.emit('update', { channel: chan, value: val });
-	};
-
-	var listenForUpdates = function(id, callback) {
-		listeners[id] = callback; // should add to the list!!
 	};
 
 	// gets the numeric value from labels
