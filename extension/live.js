@@ -11,7 +11,6 @@ socketio.complete(function() {
 	var listeners = {};
 
 	var listenForUpdates = function(id, callback) {
-		// TODO should add callback to a list!!
 		listeners[id] = callback; 
 	};
 
