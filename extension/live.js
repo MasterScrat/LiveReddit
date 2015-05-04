@@ -15,7 +15,6 @@ socketio.complete(function() {
 	};
 
 	socket.on('update', function (data) {
-		//console.log("Update received: " + data.value + " on: " + data.channel);
 		listeners[data.channel](data.value);
 	});
 
@@ -25,7 +24,6 @@ socketio.complete(function() {
 
 	var sendUpdate = function(chan, val) {
 		socket.emit('update', { channel: chan, value: val });
-		console.log("Sending: " + val + " on: " + chan);
 	};
 
 	// gets the numeric value from labels
@@ -85,8 +83,6 @@ socketio.complete(function() {
 					console.log("From " + text + " to " + newText);
 				}
 
-				//console.log(id + ": " + text + " -> " + newText);
-
 				var suffix;
 
 				// POINTS
@@ -123,14 +119,13 @@ socketio.complete(function() {
 					sendUpdate(channel, text);
 				}
 			} else {
-				console.log("WTF? " + text);
+				console.warn("WTF? " + text);
 			}
 		}
 	});
 });
 
 // analytics
-/*
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-36471625-1']);
 _gaq.push(['_trackPageview']);
@@ -139,4 +134,4 @@ _gaq.push(['_trackPageview']);
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = 'https://ssl.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();*/
+})();
