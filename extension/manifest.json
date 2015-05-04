@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+
+  "name": "LiveReddit (Beta)",
+  "description": "Never press F5 on Reddit again -- LiveReddit updates everything in realtime!",
+  "version": "0.0.3",
+
+  "permissions": [
+    "http://localhost:8080/*"
+  ],
+
+  "content_scripts": [
+    {
+      "matches": ["http://www.reddit.com/*"],
+      "js": ["jquery.js", "live.js"]
+    }
+  ]
+}
