@@ -7,8 +7,10 @@
   "version": "0.0.9",
 
   "permissions": [
-    "http://localhost:8080/*"
+    "http://52.4.85.5:8080/*"
   ],
+
+  "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
 
   "content_scripts": [
     {

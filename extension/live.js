@@ -1,10 +1,17 @@
 // socket.io server location - on EC2 for now...
-var serverUrl = "http://localhost:8080";
+var serverUrl = "http://52.4.85.5:8080";
 
 // loads socket.io.js
 var socketio = $.get(serverUrl + "/socket.io/socket.io.js", eval);
 
+var io;
+
 socketio.complete(function() {
+	if(io == undefined) {
+		console.warn("Failed to load socket.io!");
+		return;
+	}
+
 	var socket = io.connect(serverUrl);
 
 	// channel listeners
@@ -16,6 +23,7 @@ socketio.complete(function() {
 
 	socket.on('update', function (data) {
 		listeners[data.channel](data.value);
+		//console.log("down:" +data.value +" on " + data.channel)
 	});
 
 	var joinChannel = function(chan) {
@@ -23,7 +31,9 @@ socketio.complete(function() {
 	};
 
 	var sendUpdate = function(chan, val) {
+		// TODO batch updates
 		socket.emit('update', { channel: chan, value: val });
+		//console.log("up:" +val +" on " + chan)
 	};
 
 	// gets the numeric value from labels
@@ -76,11 +86,13 @@ socketio.complete(function() {
 			}
 
 			listenForUpdates(channel, function(newText) {
+				newText *= 1;
+
 				if(text == newText) {
-					console.log("wasted");
+					//console.log("wasted");
 					return;
 				} else {
-					console.log("From " + text + " to " + newText);
+					//console.log("from " + text + " to " + newText);
 				}
 
 				var suffix;
@@ -95,8 +107,8 @@ socketio.complete(function() {
 					}
 
 					updatePointCount(el, newText + addSuffix(suffix, newText));
-					updatePointCount(el.prev(), (newText*1 - 1) + addSuffix(suffix, (newText*1 - 1)));
-					updatePointCount(el.next(), (newText*1 + 1) + addSuffix(suffix, (newText*1 + 1)));
+					updatePointCount(el.prev(), (newText - 1) + addSuffix(suffix, (newText - 1)));
+					updatePointCount(el.next(), (newText + 1) + addSuffix(suffix, (newText + 1)));
 				}
 
 				// COMMENTS
@@ -119,7 +131,7 @@ socketio.complete(function() {
 					sendUpdate(channel, text);
 				}
 			} else {
-				console.warn("WTF? " + text);
+				// point count hidden
 			}
 		}
 	});
@@ -127,7 +139,7 @@ socketio.complete(function() {
 
 // analytics
 var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-36471625-1']);
+_gaq.push(['_setAccount', 'UA-36471625-4']);
 _gaq.push(['_trackPageview']);
 
 (function() {
